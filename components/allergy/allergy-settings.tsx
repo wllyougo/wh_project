@@ -1,6 +1,10 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
+import { RotateCcwIcon } from "lucide-react";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -44,6 +48,15 @@ export function AllergySettings() {
           <Skeleton className="h-40 w-full" />
         )}
       </CardContent>
+      <CardFooter className="flex flex-wrap justify-between gap-3">
+        <Button variant="outline" onClick={() => setSelected(NO_ALLERGENS)} disabled={!hydrated || selected.length === 0}>
+          <RotateCcwIcon data-icon="inline-start" />
+          선택 모두 해제
+        </Button>
+        <Link href="/" className={buttonVariants()}>
+          확인
+        </Link>
+      </CardFooter>
     </Card>
   );
 }

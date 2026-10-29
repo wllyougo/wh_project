@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { CameraIcon, ImageUpIcon } from "lucide-react";
+import { CameraIcon, ClipboardPasteIcon, ImageUpIcon } from "lucide-react";
 
 import { CandidateResults } from "@/components/candidate-results/candidate-results";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -152,12 +152,15 @@ export function SnackChecker() {
     <div className="flex flex-col gap-6">
       {hydrated && selected.length === 0 && (
         <Alert>
-          <AlertTitle>아이의 알레르기 항목이 아직 없습니다</AlertTitle>
-          <AlertDescription>
-            <Link href="/settings" className="font-medium underline underline-offset-4">
-              알레르기 설정
-            </Link>
-            에서 항목을 고르면 결과에 우유, 계란 같은 항목이 있는지 바로 알려 드립니다. 설정하지 않아도 원재료명과 알레르기 표시는 볼 수 있습니다.
+          <AlertTitle className="font-bold text-chart-4">설정하신 알레르기 항목이 아직 없습니다</AlertTitle>
+          <AlertDescription className="mt-2 flex flex-col">
+            <span>
+              <Link href="/settings" className="font-bold text-primary underline underline-offset-4">
+                알레르기 설정
+              </Link>
+              에서 항목을 고르면 결과에 설정하신 항목이 있는지 바로 알려 드립니다.
+            </span>
+            <span>설정하지 않아도 원재료명과 알레르기 표시는 볼 수 있습니다.</span>
           </AlertDescription>
         </Alert>
       )}
@@ -172,11 +175,17 @@ export function SnackChecker() {
       >
         <CardHeader>
           <CardTitle>간식 사진 올리기</CardTitle>
-          <CardDescription>
-            포장 글씨가 보이게 찍어 주세요. 파일 선택, 사진 찍기, 붙여넣기(Ctrl+V), 끌어다 놓기 모두 됩니다. 사진은 후보를 찾기 위해 외부 이미지 검색 서비스에 잠시 전달됩니다.
+          <CardDescription className="flex flex-col text-xs">
+            <span>포장 글씨가 보이게 찍어 주세요.</span>
+            <span>사진은 후보를 찾기 위해 외부 이미지 검색 서비스에 잠시 전달됩니다.</span>
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-3">
+        <CardContent className="flex flex-col gap-3">
+          <div className="flex flex-col items-center gap-1 rounded-lg border-2 border-dashed px-4 py-6 text-center text-sm text-muted-foreground">
+            <ClipboardPasteIcon className="size-5" />
+            <span>여기에 사진을 붙여넣거나(Ctrl+V) 끌어다 놓으세요</span>
+          </div>
+          <div className="flex flex-wrap gap-3">
           <Button onClick={() => fileInput.current?.click()} disabled={phase.name === "identifying"}>
             <ImageUpIcon data-icon="inline-start" />
             파일 선택
@@ -199,6 +208,7 @@ export function SnackChecker() {
             onChange={pick}
             aria-label="사진 찍기"
           />
+          </div>
         </CardContent>
       </Card>
 
