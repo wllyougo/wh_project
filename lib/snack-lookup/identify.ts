@@ -1,13 +1,16 @@
 import { del, put } from "@vercel/blob";
 
-import { requireEnv } from "@/lib/snack-lookup/config";
+import { MissingConfigError, requireEnv } from "@/lib/snack-lookup/config";
 import { parseLensCandidates, type Candidate } from "@/lib/snack-lookup/lens";
 
 const SERPAPI_URL = "https://serpapi.com";
 
 // 이미지 검색은 공개 주소만 받으므로 사진을 잠깐 올려 둘 주소를 만든다. 검색이 끝나면 지운다.
 async function hostTempImage(image: File): Promise<string> {
-  requireEnv("BLOB_READ_WRITE_TOKEN");
+  // 배포 환경은 스토어 ID와 Vercel 인증으로, 로컬은 읽기·쓰기 토큰으로 접근한다.
+  if (!process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_STORE_ID) {
+    throw new MissingConfigError(["BLOB_STORE_ID"]);
+  }
   const blob = await put(`snack-${crypto.randomUUID()}.jpg`, image, {
     access: "public",
     contentType: image.type || "image/jpeg",
